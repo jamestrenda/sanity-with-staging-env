@@ -25,10 +25,10 @@ jobs:
         run: |
           if [ ${GITHUB_REF##*/} = "production" ]; then exit 1; fi
           if [ ${GITHUB_REF##*/} = "main" ]; then exit 1; fi
-      - name: Installing Sanity CLI
-        run: npm install -g sanity@latest
+      # - name: Installing Sanity CLI
+      #   run: npm install -g sanity@latest
       - name: Export production dataset
-        run: SANITY_EXPORT_DATASET=$SANITY_EXPORT_DATASET sanity dataset export --skip-history production exports/production.tar.gz
+        run: SANITY_EXPORT_DATASET=$SANITY_EXPORT_DATASET npx sanity dataset export --skip-history production exports/production.tar.gz
       - name: Upload production.tar.gz
         uses: actions/upload-artifact@v2
         with:
@@ -37,4 +37,4 @@ jobs:
           # Fails the workflow if no files are found; defaults to 'warn'
           if-no-files-found: error
       - name: Importing production to staging
-        run: SANITY_IMPORT_DATASET=$SANITY_IMPORT_DATASET sanity dataset import exports/production.tar.gz staging --replace
+        run: SANITY_IMPORT_DATASET=$SANITY_IMPORT_DATASET npx sanity dataset import exports/production.tar.gz staging --replace
