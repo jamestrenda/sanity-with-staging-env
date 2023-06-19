@@ -24,6 +24,13 @@ jobs:
           SANITY_TOKEN: ${{ secrets.SANITY_EXPORT_DATASET }}
         with:
           args: dataset export production exports/production.tar.gz
+      - name: Upload production.tar.gz
+        uses: actions/upload-artifact@v2
+        with:
+          name: export-tarball
+          path: exports/production.tar.gz
+          # Fails the workflow if no files are found; defaults to 'warn'
+          if-no-files-found: error
       - name: Import dataset to staging
         uses: sanity-io/github-action-sanity@v0.4
         env:
