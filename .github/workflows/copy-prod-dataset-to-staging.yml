@@ -29,4 +29,5 @@ jobs:
         run: |
           npm install --legacy-peer-deps
       - name: Copy dataset
-        run: SANITY_AUTH_TOKEN=${{ secrets.SANITY_AUTH_TOKEN }} npx -y sanity@latest dataset export production && npx -y sanity@latest dataset import production.tar.gz staging --replace
+        run: |
+          SANITY_AUTH_TOKEN=${{ secrets.SANITY_AUTH_TOKEN }} npx sanity dataset export production
