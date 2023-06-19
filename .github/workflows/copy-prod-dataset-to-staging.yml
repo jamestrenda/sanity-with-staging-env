@@ -25,8 +25,8 @@ jobs:
         run: |
           if [ ${GITHUB_REF##*/} = "production" ]; then exit 1; fi
           if [ ${GITHUB_REF##*/} = "main" ]; then exit 1; fi
-      # - name: Installing Sanity CLI
-      #   run: npm install -g sanity@latest
+      - name: Installing Sanity CLI
+        run: npm install -g sanity@latest
       - name: Export production dataset
         run: SANITY_EXPORT_DATASET=$SANITY_EXPORT_DATASET npx -y sanity@latest dataset export --skip-history production exports/production.tar.gz
       - name: Upload production.tar.gz
