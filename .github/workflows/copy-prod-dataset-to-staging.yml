@@ -30,6 +30,6 @@ jobs:
         run: |
           npm install --legacy-peer-deps
       - name: Copy dataset
-        run: |
+        run:
           SANITY_EXPORT_DATASET=${{ secrets.SANITY_EXPORT_DATASET }} npx -y sanity@latest dataset export --skip-history production exports/production.tar.gz
-          SANITY_IMPORT_DATASET=${{ secrets.SANITY_IMPORT_DATASET }} npx -y sanity@latest dataset import exports/production.tar.gz staging --replace
+          # SANITY_IMPORT_DATASET=${{ secrets.SANITY_IMPORT_DATASET }} npx -y sanity@latest dataset import exports/production.tar.gz staging --replace
