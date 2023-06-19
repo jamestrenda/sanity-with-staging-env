@@ -22,7 +22,7 @@ export const homeType = defineType({
     defineField({
       name: "feature",
       title: "This came from our new feature branch",
-      type: "string",
+      type: "text",
     }),
   ],
   preview: {
