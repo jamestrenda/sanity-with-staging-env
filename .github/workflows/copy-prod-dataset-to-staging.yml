@@ -8,12 +8,9 @@ on:
       - "!main"
       - "!staging"
 jobs:
-  prepare-dataset:
+  copy-dataset:
     runs-on: ubuntu-latest
-    env:
-      # define SANITY_TOKEN and SANITY_PROJECT in GitHub secrets config
-      SANITY_TOKEN: ${{ secrets.SANITY_TOKEN }}
-      SANITY_PROJECT: ${{ secrets.SANITY_PROJECT }}
+    name: Export production dataset and import to staging
     steps:
       - name: Double-check branch name
         # branch "feature/production" would trigger this action
@@ -21,13 +18,15 @@ jobs:
         run: |
           if [ ${GITHUB_REF##*/} = "production" ]; then exit 1; fi
           if [ ${GITHUB_REF##*/} = "main" ]; then exit 1; fi
-      - name: Clone dataset from production
-        run: |
-          curl --request PUT \
-          --url https://api.sanity.io/v2021-06-07/projects/$SANITY_PROJECT/datasets/production/copy \
-          --header 'Authorization: Bearer '$SANITY_TOKEN \
-          --header 'Content-Type: application/json' \
-          --data '{
-          "targetDataset": "staging",
-          "skipHistory": true
-          }'
+      - name: Export dataset from production
+        uses: sanity-io/github-action-sanity@v0.2-alpha
+        env:
+          SANITY_TOKEN: ${{ secrets.SANITY_EXPORT_DATASET }}
+        with:
+          args: dataset export production exports/production.tar.gz
+      - name: Import dataset to staging
+        uses: sanity-io/github-action-sanity@v0.2-alpha
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_IMPORT_DATASET }}
+        with:
+          args: dataset import exports/production.tar.gz staging --replace
