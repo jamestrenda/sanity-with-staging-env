@@ -13,6 +13,9 @@ jobs:
     name: Export production dataset / import to staging
     env:
       SANITY_DATASET: staging
+      # Accidentally named these wrong, but they are correct
+      # And I think I need this to be able to use the Sanity CLI
+      # so that it knows which project to use
       SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT }}
       SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
       SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
@@ -33,5 +36,6 @@ jobs:
         run: |
           npm install --legacy-peer-deps
       - name: Copy dataset
-        run: |
-          SANITY_AUTH_TOKEN=${{ secrets.SANITY_READ_TOKEN }} npx sanity dataset export production && SANITY_AUTH_TOKEN=${{ secrets.SANITY_WRITE_TOKEN }} npx sanity dataset import production.tar.gz staging --replace
+        run:
+          SANITY_AUTH_TOKEN=${{ secrets.SANITY_READ_TOKEN }} npx sanity dataset export production exports/production.tar.gz
+          # && SANITY_AUTH_TOKEN=${{ secrets.SANITY_WRITE_TOKEN }} npx sanity dataset import production.tar.gz staging --replace
