@@ -19,13 +19,13 @@ jobs:
           if [ ${GITHUB_REF##*/} = "production" ]; then exit 1; fi
           if [ ${GITHUB_REF##*/} = "main" ]; then exit 1; fi
       - name: Export dataset from production
-        uses: sanity-io/github-action-sanity@v0.2-alpha
+        uses: sanity-io/github-action-sanity@v0.4
         env:
           SANITY_TOKEN: ${{ secrets.SANITY_EXPORT_DATASET }}
         with:
           args: dataset export production exports/production.tar.gz
       - name: Import dataset to staging
-        uses: sanity-io/github-action-sanity@v0.2-alpha
+        uses: sanity-io/github-action-sanity@v0.4
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_IMPORT_DATASET }}
         with:
