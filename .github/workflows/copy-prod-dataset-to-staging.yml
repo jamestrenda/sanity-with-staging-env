@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Export production dataset / import to staging
     env:
+      SANITY_PROJECT_ID: 616ewf5e
+      SANITY_DATASET: staging
       SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
     steps:
       - uses: actions/checkout@v3
