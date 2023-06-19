@@ -18,23 +18,17 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: "18.x"
       - name: Double-check branch name
         # branch "feature/production" would trigger this action
         # so we will cancel the job if that happens
         run: |
           if [ ${GITHUB_REF##*/} = "production" ]; then exit 1; fi
           if [ ${GITHUB_REF##*/} = "main" ]; then exit 1; fi
-      - name: Installing Sanity CLI
-        run: npm install -g sanity@latest
-      - name: Export production dataset
-        run: SANITY_EXPORT_DATASET=$SANITY_EXPORT_DATASET npx -y sanity@latest dataset export --skip-history production exports/production.tar.gz
-      - name: Upload production.tar.gz
-        uses: actions/upload-artifact@v2
-        with:
-          name: export-tarball
-          path: exports/production.tar.gz
-          # Fails the workflow if no files are found; defaults to 'warn'
-          if-no-files-found: error
-      - name: Importing production to staging
-        run: SANITY_IMPORT_DATASET=$SANITY_IMPORT_DATASET npx -y sanity@latest dataset import exports/production.tar.gz staging --replace
+      - name: Install dependencies
+        run: |
+          npm install --legacy-peer-deps
+      - name: Copy dataset
+        run: |
+          SANITY_EXPORT_DATASET=$SANITY_EXPORT_DATASET npx -y sanity@latest dataset export --skip-history production exports/production.tar.gz
+          SANITY_IMPORT_DATASET=$SANITY_IMPORT_DATASET npx -y sanity@latest dataset import exports/production.tar.gz staging --replace
