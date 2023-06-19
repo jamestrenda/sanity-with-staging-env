@@ -23,7 +23,7 @@ jobs:
         env:
           SANITY_TOKEN: ${{ secrets.SANITY_EXPORT_DATASET }}
         with:
-          args: dataset export production exports/production.tar.gz
+          args: . dataset export production exports/production.tar.gz
       - name: Upload production.tar.gz
         uses: actions/upload-artifact@v2
         with:
@@ -36,4 +36,4 @@ jobs:
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_IMPORT_DATASET }}
         with:
-          args: dataset import exports/production.tar.gz staging --replace
+          args: . dataset import exports/production.tar.gz staging --replace
