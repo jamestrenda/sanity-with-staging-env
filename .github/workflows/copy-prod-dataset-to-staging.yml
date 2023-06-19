@@ -1,4 +1,4 @@
-name: Copy Sanity Production Dataset
+name: Copy Sanity Production Dataset To Staging
 on:
   push:
     branches:
@@ -10,20 +10,25 @@ on:
 jobs:
   copy-dataset:
     runs-on: ubuntu-latest
-    name: Export production dataset and import to staging
+    name: Export production dataset / import to staging
+    env:
+      SANITY_EXPORT_DATASET: ${{ secrets.SANITY_EXPORT_DATASET }}
+      SANITY_IMPORT_DATASET: ${{ secrets.SANITY_IMPORT_DATASET }}
     steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
       - name: Double-check branch name
         # branch "feature/production" would trigger this action
         # so we will cancel the job if that happens
         run: |
           if [ ${GITHUB_REF##*/} = "production" ]; then exit 1; fi
           if [ ${GITHUB_REF##*/} = "main" ]; then exit 1; fi
-      - name: Export dataset from production
-        uses: sanity-io/github-action-sanity@v0.4
-        env:
-          SANITY_TOKEN: ${{ secrets.SANITY_EXPORT_DATASET }}
-        with:
-          args: . dataset export production exports/production.tar.gz
+      - name: Installing Sanity CLI
+        run: npm install -g sanity@latest
+      - name: Export production dataset
+        run: SANITY_EXPORT_DATASET=$SANITY_EXPORT_DATASET sanity dataset export --skip-history production exports/production.tar.gz
       - name: Upload production.tar.gz
         uses: actions/upload-artifact@v2
         with:
@@ -31,9 +36,5 @@ jobs:
           path: exports/production.tar.gz
           # Fails the workflow if no files are found; defaults to 'warn'
           if-no-files-found: error
-      - name: Import dataset to staging
-        uses: sanity-io/github-action-sanity@v0.4
-        env:
-          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_IMPORT_DATASET }}
-        with:
-          args: . dataset import exports/production.tar.gz staging --replace
+      - name: Importing production to staging
+        run: SANITY_IMPORT_DATASET=$SANITY_IMPORT_DATASET sanity dataset import exports/production.tar.gz staging --replace
