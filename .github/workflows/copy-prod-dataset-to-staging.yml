@@ -12,8 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Export production dataset / import to staging
     env:
-      SANITY_PROJECT_ID: 616ewf5e
       SANITY_DATASET: staging
+      SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT }}
+      SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
+      SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
       SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
     steps:
       - uses: actions/checkout@v3
@@ -32,4 +34,4 @@ jobs:
           npm install --legacy-peer-deps
       - name: Copy dataset
         run: |
-          SANITY_AUTH_TOKEN=${{ secrets.SANITY_AUTH_TOKEN }} npx sanity dataset export production
+          SANITY_AUTH_TOKEN=${{ secrets.SANITY_READ_TOKEN }} npx sanity dataset export production
