@@ -14,8 +14,6 @@ jobs:
     env:
       SANITY_DATASET: staging
       # Accidentally named these wrong, but they are correct
-      # And I think I need this to be able to use the Sanity CLI
-      # so that it knows which project to use
       SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT }}
       SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
       SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
