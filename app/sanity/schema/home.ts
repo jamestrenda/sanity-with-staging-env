@@ -19,6 +19,11 @@ export const homeType = defineType({
       name: "test",
       type: "string",
     }),
+    defineField({
+      name: "feature",
+      title: "This came from our new feature branch",
+      type: "string",
+    }),
   ],
   preview: {
     select: {
