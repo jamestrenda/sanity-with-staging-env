@@ -12,16 +12,13 @@ jobs:
       SANITY_DATASET: production
       # Accidentally named these wrong, but they are correct
       SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT }}
-      # Might not need these for this action...
-      # SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
-      # SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
       SANITY_AUTH_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "name=date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
       - name: Install node
         uses: actions/setup-node@v3
         with:
@@ -31,12 +28,12 @@ jobs:
         run: |
           npm install --legacy-peer-deps
       - name: Export dataset
-        run: npx sanity dataset export production backups/backup-${{ steps.date.outputs.date }}.tar.gz
+        run: npx sanity dataset export production backups/backup-$GITHUB_OUTPUT.tar.gz
       - name: Upload backup
         uses: actions/upload-artifact@v3
         with:
-          name: backup-${{ steps.date.outputs.date }}
-          path: backups/backup-${{ steps.date.outputs.date }}.tar.gz
+          name: backup-$GITHUB_OUTPUT
+          path: backups/backup-$GITHUB_OUTPUT.tar.gz
           retention-days: 90
           # Fails the workflow if no files are found; defaults to 'warn'
           if-no-files-found: error
