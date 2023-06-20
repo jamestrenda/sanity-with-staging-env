@@ -28,12 +28,12 @@ jobs:
         run: |
           npm install --legacy-peer-deps
       - name: Export dataset
-        run: npx sanity dataset export production backups/backup-$GITHUB_OUTPUT.tar.gz
+        run: npx sanity dataset export production backups/backup-${{ output.date }}.tar.gz
       - name: Upload backup
         uses: actions/upload-artifact@v3
         with:
-          name: backup-$GITHUB_OUTPUT
-          path: backups/backup-$GITHUB_OUTPUT.tar.gz
+          name: backup-${{ output.date }}
+          path: backups/backup-${{ output.date }}.tar.gz
           retention-days: 90
           # Fails the workflow if no files are found; defaults to 'warn'
           if-no-files-found: error
