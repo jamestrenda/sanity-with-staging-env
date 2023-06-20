@@ -33,9 +33,15 @@ And there you have it. Two separate environments with Sanity and Remix.
 
 <p class="important">IMPORTANT: Due to Sanity's real-time nature, if you don't want to affect the production dataset while doing local development, you must set the SANITY_DATASET environment variable to "staging". In fact, with our fancy new multi-environment setup, it's probably never wise to use the production dataset during local development.</p>
 
-## Use GitHub Actions as a CI/CD pipeline to cleanup the staging dataset and perform production backups.
+## Use GitHub Actions as a CI/CD pipeline
 
-    - Work-in-progress
+### Copy Production to Staging
+
+For copying the production dataset to the staging dataset, see [.github/workflows/copy-prod-dataset-to-staging.yml](https://github.com/jamestrenda/sanity-with-staging-env/blob/main/.github/workflows/copy-prod-dataset-to-staging.yml)
+
+### Perform production backups.
+
+wip
 
 <style>
 
