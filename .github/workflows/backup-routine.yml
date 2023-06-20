@@ -31,8 +31,8 @@ jobs:
         run: |
           npm install --legacy-peer-deps
       - name: Export dataset
-        run: npx sanity dataset export production backups/backup-${{ steps.date.outputs.date }}.tar.gz"
-      - name: Upload backup-${{ steps.date.outputs.date }}.tar.gz
+        run: npx sanity dataset export production backups/backup-${{ steps.date.outputs.date }}.tar.gz
+      - name: Upload backup
         uses: actions/upload-artifact@v3
         with:
           name: backup-${{ steps.date.outputs.date }}
