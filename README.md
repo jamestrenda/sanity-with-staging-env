@@ -39,9 +39,9 @@ To setup a staging environment with Sanity:
 
    I guess if we ever needed to go back in time to a specific commit, we would need to add that deployment URL to our CORS settings in Sanity, but that **_should_** be a rare occurance.
 
-And there you have it. Two separate environments with Sanity and Remix.
+And there you have it. Two separate environments with Sanity and Remix. :partying_face:
 
-<p class="important">IMPORTANT: Due to Sanity's real-time nature, if you don't want to affect the production dataset while doing local development, you must set the SANITY_DATASET environment variable to "staging". In fact, with our fancy new multi-environment setup, it's probably never wise to use the production dataset during local development.</p>
+**IMPORTANT: Due to Sanity's real-time nature, if you don't want to affect the production dataset while doing local development, you must set the SANITY_DATASET environment variable to "staging". In fact, with our fancy new multi-environment setup, it's probably never wise to use the production dataset during local development.**
 
 ## Use GitHub Actions as a CI/CD pipeline
 
@@ -52,12 +52,3 @@ For copying the production dataset to the staging dataset, see [.github/workflow
 ### Perform production backups.
 
 wip
-
-<style>
-
-.important {
-  padding: 10px;
-  background: lightyellow;
-  color: #111
-}
-  </style>
