@@ -1,0 +1,41 @@
+name: Backup Routine
+on:
+  workflow_dispatch:
+  schedule:
+    # Runs at 04:00 UTC on the 1st and 17th of every month
+    - cron: "0 4 */1 * *"
+jobs:
+  backup-dataset:
+    runs-on: ubuntu-18.04
+    name: Backup dataset
+    env:
+      SANITY_DATASET: production
+      # Accidentally named these wrong, but they are correct
+      SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT }}
+      SANITY_READ_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
+      SANITY_WRITE_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
+      SANITY_AUTH_TOKEN: ${{ secrets.SANITY_WRITE_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Install node
+        uses: actions/setup-node@v3
+        with:
+          # Or whatever version you need
+          node-version: "16.x"
+      - name: Install dependencies
+        run: |
+          npm install --legacy-peer-deps
+      - name: Export dataset
+        run: npx sanity dataset export production backups/backup-${{ steps.date.outputs.date }}.tar.gz"
+      - name: Upload backup-${{ steps.date.outputs.date }}.tar.gz
+        uses: actions/upload-artifact@v3
+        with:
+          name: backup-${{ steps.date.outputs.date }}
+          path: backups/backup-${{ steps.date.outputs.date }}.tar.gz
+          retention-days: 90
+          # Fails the workflow if no files are found; defaults to 'warn'
+          if-no-files-found: error
