@@ -51,4 +51,4 @@ For copying the production dataset to the staging dataset, see [.github/workflow
 
 ### Perform production backups.
 
-wip
+For creating automatic backups with cache, see [.github/workflows/backup-routine.yml](https://github.com/jamestrenda/sanity-with-staging-env/blob/main/.github/workflows/backup-routine.yml)
