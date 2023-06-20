@@ -43,7 +43,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
       - name: 📦 Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
       - name: 📤 Export dataset
         run: npx sanity dataset export production backups/backup-${{ steps.date.outputs.CURRENT_DATE }}.tar.gz
       - name: 💾 Save backup
